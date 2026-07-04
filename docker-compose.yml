@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16        # which version/tag? (hint: match what you'll deploy with later — 16 is a good current stable choice)
+    container_name: clinic-erp-db        # a friendly name, e.g. clinic-erp-db
+    restart: unless-stopped               # should it restart automatically if it crashes or your machine reboots? look up 'unless-stopped'
+    environment:
+      POSTGRES_DB: clinic_erp         # the database name Spring Boot will connect to
+      POSTGRES_USER: clinic_user       # a username for the DB
+      POSTGRES_PASSWORD: clinic_pass   # a password — fine to keep simple for local dev, this isn't going in production config
+    ports:
+      - "5432:5432"              # format is "host_port:container_port" — Postgres's default port inside the container is 5432
+    volumes:
+      - clinic_erp_data:/var/lib/postgresql/data   # this is what makes your data survive container restarts — pick a volume name
+
+volumes:
+  clinic_erp_data:
