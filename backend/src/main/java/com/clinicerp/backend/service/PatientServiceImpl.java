@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class PatientServiceImpl implements PatientService {
     // implement all 5 methods here
     @Override
     public Patient registerPatient(Patient patient) {
+        patient.setCreatedAt(LocalDateTime.now());
         return patientRepository.save(patient);
     }
 
