@@ -10,3 +10,6 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+jwt:
+  secret: "clinicErpSuperSecretKeyForJwtSigningChangeThisInProduction123"
+  expiration: 86400000
