@@ -3,3 +3,6 @@ spring:
     name: clinic-erp-backend
   profiles:
     active: dev
+logging:
+  level:
+    org.springframework.security: DEBUG

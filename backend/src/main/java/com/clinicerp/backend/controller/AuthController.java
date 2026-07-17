@@ -16,6 +16,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public AuthResponseDTO register(@RequestBody RegisterRequestDTO request) {
+        System.out.println("REGISTER ENDPOINT HIT");
         return authService.register(request);
     }
 

@@ -22,28 +22,20 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponseDTO register(RegisterRequestDTO request) {
-
+        // check if username already exists
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists.");
+            throw new RuntimeException("Username already exists: " + request.getUsername());
         }
 
         User user = new User();
-
         user.setUsername(request.getUsername());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         user.setRole(request.getRole());
-        userRepository.save(user);
 
-        String token = jwtUtil.generateToken(
-                user.getUsername(),
-                user.getRole()
-        );
+        User savedUser = userRepository.save(user);
 
-        return new AuthResponseDTO(
-                token,
-                user.getUsername(),
-                user.getRole()
-        );
+        String token = jwtUtil.generateToken(savedUser.getUsername(), savedUser.getRole());
+        return new AuthResponseDTO(token, savedUser.getUsername(), savedUser.getRole());
     }
 
     @Override
