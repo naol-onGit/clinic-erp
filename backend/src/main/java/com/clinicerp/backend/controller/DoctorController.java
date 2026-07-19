@@ -8,6 +8,7 @@ import com.clinicerp.backend.service.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class DoctorController {
 
     private final DoctorService doctorService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<DoctorResponseDTO> registerDoctor(@RequestBody DoctorRequestDTO requestDTO) {
         Doctor doctor = DoctorMapper.toEntity(requestDTO);
@@ -41,6 +43,7 @@ public class DoctorController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<DoctorResponseDTO> updateDoctor(@PathVariable Long id, @RequestBody DoctorRequestDTO requestDTO) {
         Doctor doctor = DoctorMapper.toEntity(requestDTO);
@@ -48,6 +51,7 @@ public class DoctorController {
         return ResponseEntity.ok(DoctorMapper.toResponseDTO(updated));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDoctor(@PathVariable Long id) {
         doctorService.deleteDoctor(id);

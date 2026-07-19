@@ -8,6 +8,7 @@ import com.clinicerp.backend.service.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @PostMapping
     public ResponseEntity<AppointmentResponseDTO> createAppointment(@RequestBody AppointmentRequestDTO requestDTO) {
         Appointment appointment = AppointmentMapper.toEntity(requestDTO);
@@ -41,6 +43,7 @@ public class AppointmentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @PutMapping("/{id}")
     public ResponseEntity<AppointmentResponseDTO> updateAppointment(@PathVariable Long id, @RequestBody AppointmentRequestDTO requestDTO) {
         Appointment appointment = AppointmentMapper.toEntity(requestDTO);
@@ -48,6 +51,7 @@ public class AppointmentController {
         return ResponseEntity.ok(AppointmentMapper.toResponseDTO(updated));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAppointment(@PathVariable Long id) {
         appointmentService.deleteAppointment(id);

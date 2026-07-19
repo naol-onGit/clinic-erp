@@ -8,6 +8,7 @@ import com.clinicerp.backend.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class InvoiceController {
 
     private final InvoiceService invoiceService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @PostMapping
     public ResponseEntity<InvoiceResponseDTO> createInvoice(@RequestBody InvoiceRequestDTO requestDTO) {
         Invoice invoice = InvoiceMapper.toEntity(requestDTO);
@@ -41,6 +43,7 @@ public class InvoiceController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @PutMapping("/{id}")
     public ResponseEntity<InvoiceResponseDTO> updateInvoice(@PathVariable Long id, @RequestBody InvoiceRequestDTO requestDTO) {
         Invoice invoice = InvoiceMapper.toEntity(requestDTO);
@@ -48,6 +51,7 @@ public class InvoiceController {
         return ResponseEntity.ok(InvoiceMapper.toResponseDTO(updated));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteInvoice(@PathVariable Long id) {
         invoiceService.deleteInvoice(id);

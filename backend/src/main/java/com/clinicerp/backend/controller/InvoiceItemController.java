@@ -8,6 +8,7 @@ import com.clinicerp.backend.service.InvoiceItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class InvoiceItemController {
 
     private final InvoiceItemService invoiceItemService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @PostMapping
     public ResponseEntity<InvoiceItemResponseDTO> createInvoiceItem(@RequestBody InvoiceItemRequestDTO requestDTO) {
         InvoiceItem item = InvoiceItemMapper.toEntity(requestDTO);
@@ -41,6 +43,7 @@ public class InvoiceItemController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @PutMapping("/{id}")
     public ResponseEntity<InvoiceItemResponseDTO> updateInvoiceItem(@PathVariable Long id, @RequestBody InvoiceItemRequestDTO requestDTO) {
         InvoiceItem item = InvoiceItemMapper.toEntity(requestDTO);
@@ -48,6 +51,7 @@ public class InvoiceItemController {
         return ResponseEntity.ok(InvoiceItemMapper.toResponseDTO(updated));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteInvoiceItem(@PathVariable Long id) {
         invoiceItemService.deleteInvoiceItem(id);

@@ -6,6 +6,7 @@ import com.clinicerp.backend.dto.RegisterRequestDTO;
 import com.clinicerp.backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/auth")
