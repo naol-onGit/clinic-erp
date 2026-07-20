@@ -7,6 +7,7 @@ import com.clinicerp.backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -16,13 +17,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public AuthResponseDTO register(@RequestBody RegisterRequestDTO request) {
+    public AuthResponseDTO register(@Valid @RequestBody RegisterRequestDTO request) {
         System.out.println("REGISTER ENDPOINT HIT");
         return authService.register(request);
     }
 
     @PostMapping("/login")
-    public AuthResponseDTO login(@RequestBody LoginRequestDTO request) {
+    public AuthResponseDTO login(@Valid @RequestBody LoginRequestDTO request) {
         return authService.login(request);
     }
 }

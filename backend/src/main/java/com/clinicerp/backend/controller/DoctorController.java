@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class DoctorController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<DoctorResponseDTO> registerDoctor(@RequestBody DoctorRequestDTO requestDTO) {
+    public ResponseEntity<DoctorResponseDTO> registerDoctor(@Valid @RequestBody DoctorRequestDTO requestDTO) {
         Doctor doctor = DoctorMapper.toEntity(requestDTO);
         Doctor saved = doctorService.registerDoctor(doctor);
         return ResponseEntity.status(201).body(DoctorMapper.toResponseDTO(saved));
@@ -45,7 +46,7 @@ public class DoctorController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<DoctorResponseDTO> updateDoctor(@PathVariable Long id, @RequestBody DoctorRequestDTO requestDTO) {
+    public ResponseEntity<DoctorResponseDTO> updateDoctor(@PathVariable Long id, @Valid @RequestBody DoctorRequestDTO requestDTO) {
         Doctor doctor = DoctorMapper.toEntity(requestDTO);
         Doctor updated = doctorService.updateDoctor(id, doctor);
         return ResponseEntity.ok(DoctorMapper.toResponseDTO(updated));

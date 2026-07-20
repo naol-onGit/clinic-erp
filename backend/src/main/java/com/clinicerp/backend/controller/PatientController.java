@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class PatientController {
     private final PatientService patientService;
 
     @PostMapping
-    public ResponseEntity<PatientResponseDTO> registerPatient(@RequestBody PatientRequestDTO requestDTO) {
+    public ResponseEntity<PatientResponseDTO> registerPatient(@Valid @RequestBody PatientRequestDTO requestDTO) {
         Patient patient = PatientMapper.toEntity(requestDTO);
         Patient savedPatient = patientService.registerPatient(patient);
         PatientResponseDTO responseDTO = PatientMapper.toResponseDTO(savedPatient);
@@ -45,7 +46,7 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable Long id, @RequestBody PatientRequestDTO requestDTO) {
+    public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable Long id, @Valid @RequestBody PatientRequestDTO requestDTO) {
         Patient patient = PatientMapper.toEntity(requestDTO);
         Patient updatedPatient = patientService.updatePatient(id, patient);
         PatientResponseDTO responseDTO = PatientMapper.toResponseDTO(updatedPatient);

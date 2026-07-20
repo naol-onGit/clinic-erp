@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class InvoiceController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @PostMapping
-    public ResponseEntity<InvoiceResponseDTO> createInvoice(@RequestBody InvoiceRequestDTO requestDTO) {
+    public ResponseEntity<InvoiceResponseDTO> createInvoice(@Valid @RequestBody InvoiceRequestDTO requestDTO) {
         Invoice invoice = InvoiceMapper.toEntity(requestDTO);
         Invoice saved = invoiceService.createInvoice(invoice);
         return ResponseEntity.status(201).body(InvoiceMapper.toResponseDTO(saved));
@@ -45,7 +46,7 @@ public class InvoiceController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @PutMapping("/{id}")
-    public ResponseEntity<InvoiceResponseDTO> updateInvoice(@PathVariable Long id, @RequestBody InvoiceRequestDTO requestDTO) {
+    public ResponseEntity<InvoiceResponseDTO> updateInvoice(@PathVariable Long id, @Valid @RequestBody InvoiceRequestDTO requestDTO) {
         Invoice invoice = InvoiceMapper.toEntity(requestDTO);
         Invoice updated = invoiceService.updateInvoice(id, invoice);
         return ResponseEntity.ok(InvoiceMapper.toResponseDTO(updated));

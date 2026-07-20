@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class AppointmentController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @PostMapping
-    public ResponseEntity<AppointmentResponseDTO> createAppointment(@RequestBody AppointmentRequestDTO requestDTO) {
+    public ResponseEntity<AppointmentResponseDTO> createAppointment(@Valid @RequestBody AppointmentRequestDTO requestDTO) {
         Appointment appointment = AppointmentMapper.toEntity(requestDTO);
         Appointment saved = appointmentService.createAppointment(appointment);
         return ResponseEntity.status(201).body(AppointmentMapper.toResponseDTO(saved));
@@ -45,7 +46,7 @@ public class AppointmentController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @PutMapping("/{id}")
-    public ResponseEntity<AppointmentResponseDTO> updateAppointment(@PathVariable Long id, @RequestBody AppointmentRequestDTO requestDTO) {
+    public ResponseEntity<AppointmentResponseDTO> updateAppointment(@PathVariable Long id, @Valid @RequestBody AppointmentRequestDTO requestDTO) {
         Appointment appointment = AppointmentMapper.toEntity(requestDTO);
         Appointment updated = appointmentService.updateAppointment(id, appointment);
         return ResponseEntity.ok(AppointmentMapper.toResponseDTO(updated));
