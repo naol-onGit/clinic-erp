@@ -4,6 +4,8 @@ import com.clinicerp.backend.entity.Patient;
 import com.clinicerp.backend.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,5 +44,15 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public void deletePatient(Long id) {
         patientRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Patient> getAllPatients(Pageable pageable) {
+        return patientRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Patient> searchPatients(String name, Pageable pageable) {
+        return patientRepository.findByFullNameContainingIgnoreCase(name, pageable);
     }
 }

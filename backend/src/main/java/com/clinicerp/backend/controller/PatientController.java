@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -29,12 +32,22 @@ public class PatientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PatientResponseDTO>> getAllPatients() {
-        List<Patient> patients = patientService.getAllPatients();
-        List<PatientResponseDTO> responseDTOs = patients.stream()
-                .map(PatientMapper::toResponseDTO)
-                .toList();
-        return ResponseEntity.ok(responseDTOs);
+    public ResponseEntity<Page<PatientResponseDTO>> getAllPatients(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<PatientResponseDTO> result;
+        if (search != null && !search.isBlank()) {
+            result = patientService.searchPatients(search, pageable)
+                    .map(PatientMapper::toResponseDTO);
+        } else {
+            result = patientService.getAllPatients(pageable)
+                    .map(PatientMapper::toResponseDTO);
+        }
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
