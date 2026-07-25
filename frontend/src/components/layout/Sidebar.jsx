@@ -5,19 +5,18 @@ import {
   Stethoscope,
   Calendar,
   Receipt,
-  Settings,
-  ChevronRight,
   Cross,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { navItems } from './sidebarConfig';
 
-const navItems = [
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['ADMIN', 'DOCTOR', 'RECEPTIONIST'] },
-  { to: '/patients', icon: Users, label: 'Patients', roles: ['ADMIN', 'RECEPTIONIST'] },
-  { to: '/doctors', icon: Stethoscope, label: 'Doctors', roles: ['ADMIN'] },
-  { to: '/appointments', icon: Calendar, label: 'Appointments', roles: ['ADMIN', 'DOCTOR', 'RECEPTIONIST'] },
-  { to: '/billing', icon: Receipt, label: 'Billing', roles: ['ADMIN', 'RECEPTIONIST'] },
-];
+const iconMap = {
+  '/dashboard': LayoutDashboard,
+  '/patients': Users,
+  '/doctors': Stethoscope,
+  '/appointments': Calendar,
+  '/billing': Receipt,
+};
 
 export default function Sidebar({ expanded, setExpanded }) {
   const { user } = useAuth();
@@ -52,27 +51,30 @@ export default function Sidebar({ expanded, setExpanded }) {
 
       {/* Nav items */}
       <nav className="flex-1 py-4 space-y-1 px-2">
-        {visibleItems.map(({ to, icon: Icon, label }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) => `
-              flex items-center gap-3 px-2 py-2.5 rounded-lg
-              transition-all duration-150
-              ${isActive
-                ? 'bg-blue-600 text-white'
-                : 'text-blue-200 hover:bg-[#1a3f7a] hover:text-white'
-              }
-            `}
-          >
-            <Icon size={20} className="shrink-0" />
-            {expanded && (
-              <span className="text-sm font-medium whitespace-nowrap overflow-hidden">
-                {label}
-              </span>
-            )}
-          </NavLink>
-        ))}
+        {visibleItems.map(({ to, label }) => {
+          const Icon = iconMap[to];
+          return (
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) => `
+                flex items-center gap-3 px-2 py-2.5 rounded-lg
+                transition-all duration-150
+                ${isActive
+                  ? 'bg-blue-600 text-white'
+                  : 'text-blue-200 hover:bg-[#1a3f7a] hover:text-white'
+                }
+              `}
+            >
+              {Icon && <Icon size={20} className="shrink-0" />}
+              {expanded && (
+                <span className="text-sm font-medium whitespace-nowrap overflow-hidden">
+                  {label}
+                </span>
+              )}
+            </NavLink>
+          );
+        })}
       </nav>
 
       {/* User info at bottom */}
