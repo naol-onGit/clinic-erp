@@ -1,153 +1,166 @@
-# Clinic ERP: Full-Stack Clinic Management System
+# Clinic ERP
 
-A production-ready, shippable, and portfolio-grade **Small Clinic Management Enterprise Resource Planning (ERP)** system built with Java Spring Boot and React. This application demonstrates modern enterprise architecture patterns, stateless JWT authentication, role-based access control (RBAC), and robust automated testing pipelines, all running on a fully containerized architecture.
+A production-ready, web-based Clinic Management ERP system built with Java Spring Boot and React.
 
----
-
-## 🚀 Key Features
-
-- **Role-Based Access Control (RBAC):** Distinct dashboards and access scopes for **Admins**, **Doctors**, and **Receptionists** using Spring Security and JWT.
-- **Patient Management:** Full CRUD capabilities for tracking patient demographics, blood groups, and medical histories.
-- **Appointment Scheduling:** Advanced scheduling mechanics with automated conflict detection to prevent double-booking.
-- **Automated Invoicing & Billing:** Dynamic invoice generation directly from completed appointments, tracking itemized costs and payment statuses (`PAID`/`UNPAID`).
-- **Interactive API Documentation:** Real-time interactive REST API exploration via integrated Swagger UI (`springdoc-openapi`).
-- **Containerized Dev Parity:** Multi-stage Docker configurations allowing the entire multi-service stack to boot with a single command (`docker-compose up`).
+🔗 **Live Demo:** [https://clinic-erp-three.vercel.app/](https://clinic-erp-three.vercel.app/)
+📖 **API Docs:** [clinic-erp-backend.onrender.com/swagger-ui/index.html](https://clinic-erp-backend.onrender.com/swagger-ui/index.html)
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## Features
+
+- 🔐 JWT authentication with role-based access control (Admin, Doctor, Receptionist)
+- 👥 Patient management — register, search, paginate, update, delete
+- 🩺 Doctor management — profiles linked to user accounts
+- 📅 Appointment scheduling — status tracking (Scheduled, Completed, Cancelled)
+- 🧾 Billing & invoicing — mark paid/unpaid, revenue summary
+- 📖 Auto-generated Swagger/OpenAPI documentation
+- ✅ 31 unit tests with Mockito
+- 🚀 CI/CD with GitHub Actions
+- 🐳 Docker-ready for local development
+
+---
+
+## Tech Stack
 
 ### Backend
-* **Core Framework:** Java 17 + Spring Boot 3
-* **Persistence & Data:** Spring Data JPA + Hibernate + PostgreSQL
-* **Database Migrations:** Flyway (Versioned SQL migrations)
-* **Security & Auth:** Spring Security + Stateless JWT (`jjwt`)
-* **API Documentation:** `springdoc-openapi` (Swagger UI)
-* **Testing Stack:** JUnit 5 + Mockito + Testcontainers (PostgreSQL)
+- Java 17 + Spring Boot 4.x
+- Spring Security + JWT (jjwt)
+- Spring Data JPA + Flyway migrations
+- PostgreSQL
+- Swagger/OpenAPI (springdoc)
+- JUnit 5 + Mockito
+- Docker + Docker Compose
+- Maven
 
 ### Frontend
-* **Core Framework:** React 18 (Vite fast dev loop)
-* **Styling & UI:** Tailwind CSS
-* **Routing & State:** React Router DOM + React Context API
-* **API Client:** Axios (configured with automated JWT interceptors)
-* **Testing Stack:** Vitest + React Testing Library
-
-### Infrastructure & DevOps
-* **Containerization:** Docker + Docker Compose
-* **CI/CD Pipelines:** GitHub Actions (Independent frontend & backend workflows)
-* **Hosting Platforms:** Render (Backend Docker Web Service), Vercel/Netlify (Frontend Static), Neon/Supabase (Serverless Postgres)[cite: 1]
+- React 19 (Vite)
+- Tailwind CSS
+- React Router
+- Axios
+- Lucide React icons
 
 ---
 
-## 📂 Repository Structure
-
-The project utilizes a **monorepo** layout to manage both the decoupled backend API and the single-page frontend application efficiently[cite: 1]:
-
-```text
-clinic-erp/
-├── .github/workflows/       # Automated CI/CD pipelines
-│   ├── backend-ci.yml       # Maven test, build, and checkstyle verification
-│   └── frontend-ci.yml      # Vitest execution and production compilation
-├── backend/                 # Spring Boot application
-│   ├── src/main/java/       # Domain modules (Controller -> Service -> Repo -> Entity)
-│   ├── src/main/resources/  # Application configurations & Flyway migrations
-│   ├── src/test/            # Unit, Mockito, and Testcontainers integration tests
-│   └── Dockerfile           # Multi-stage JRE runtime container image build
-├── frontend/                # React application
-│   ├── src/                 # Component, hooks, pages, contexts, and API wrappers
-│   ├── Dockerfile           # Production-ready Nginx container image build
-│   ├── package.json         # Front-end dependencies and test scripts
-│   └── vite.config.js       # Vite bundler configuration
-├── docs/                    # Technical architecture design and ER diagrams
-├── docker-compose.yml       # Full stack local orchestration configuration
-└── README.md                # Project documentation
+## Architecture
 ```
+clinic-erp/
+├── backend/ # Spring Boot REST API
+│ ├── src/main/java/com/clinicerp/backend/
+│ │ ├── config/ # Security, OpenAPI config
+│ │ ├── controller/ # REST controllers
+│ │ ├── dto/ # Request/Response DTOs
+│ │ ├── entity/ # JPA entities
+│ │ ├── exception/ # Global exception handler
+│ │ ├── mapper/ # Entity <-> DTO mappers
+│ │ ├── repository/ # Spring Data repositories
+│ │ ├── security/ # JWT filter, UserDetailsService
+│ │ └── service/ # Business logic
+│ └── src/main/resources/
+│ └── db/migration/ # Flyway SQL migrations
+└── frontend/ # React SPA
+└── src/
+├── api/ # Axios instance + interceptors
+├── components/ # Layout (Sidebar, Topbar)
+├── context/ # Auth context + provider
+├── pages/ # Login, Dashboard, Patients, Doctors, Appointments, Billing
+└── routes/ # Protected route wrapper
+```
+---
 
-## 🗄️ Database Schema & Domain Model
-
-The underlying domain model is normalized and built to scale. The core entities comprise:
-
-* **User**: Manages authorization credentials (`username`, `passwordHash`) and maps them to granular system roles (`ADMIN`, `DOCTOR`, `RECEPTIONIST`).
-
-* **Doctor**: Extension of the user profile, tracking core specializations and scheduling availability.
-
-* **Patient**: Complete medical-demographic registry tracking names, DOB, blood types, and contact vectors.
-
-* **Appointment**: Connects doctors and patients at specific timestamps while maintaining workflow state transitions (`SCHEDULED`, `COMPLETED`, `CANCELLED`).
-
-* **Invoice & InvoiceItem**: Captures financial ledger data tied to appointments with tracking for payment collection metrics.
-
-* **Entity Relationship Diagram**: The database design diagram can be inspected visually under `docs/er-diagram.png`.
-
-## ⚙️ Local Development Setup
+## Local Development
 
 ### Prerequisites
-Ensure the following tools are installed locally:
+- Java 17
+- Node.js 20+
+- Docker Desktop
 
-* Java 17 JDK or higher
-* Node.js & npm
-* Docker Desktop
+### Backend
 
-### Option A: Complete Containerized Boot (Recommended)
-Spin up the database, backend REST API, and frontend client instantly using the orchestrated Compose architecture:
-
-```
-# Clone the repository
-git clone [https://github.com/naol-onGit/clinic-erp.git](https://github.com/naol-onGit/clinic-erp.git)
-cd clinic-erp
-
-# Run the entire ecosystem
-docker-compose up --build
-```
-* **Frontend UI**: `http://localhost:5173`
-* **Backend API Gateway**: `http://localhost:8080`
-* **Swagger Documentation**: `http://localhost:8080/swagger-ui.html`
-
-### Option B: Step-by-Step Manual Boot
-**1. Database Setup**
-Launch a local PostgreSQL database or create a serverless cloud tier using Neon. Update `backend/src/main/resources/application-dev.yml` with your connection credentials.
-
-**2. Start the Spring Boot Backend**
-```
+```bash
 cd backend
-# Build and run the project using the Maven Wrapper
-./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+docker-compose up -d        # start Postgres
+./mvnw spring-boot:run      # start Spring Boot on port 8080
 ```
-**3. Start the React Frontend**
-```
+
+### Frontend
+
+```bash
 cd frontend
-# Install client dependencies
 npm install
-# Start Vite development server
-npm run dev
+npm run dev                 # start React on port 5173
 ```
 
-## 🧪 Testing Matrix
-The implementation is verified across layers to ensure stability and reliable contract-driven communication:
+### API Documentation
 
-### Backend Testing Suite
-* **Service Layer**: Isolated business logic validation (e.g., appointment overlap algorithms, automated billing arithmetic) verified using JUnit 5 and Mockito.
+Once the backend is running, visit:
 
-* **Integration Layer**: Controller endpoints and JPA query performance tested under real-world runtime environments using Testcontainers spawning transient PostgreSQL Docker containers.
+http://localhost:8080/swagger-ui/index.html
 
-```
+---
+
+## Environment Variables
+
+### Backend (Render)
+| Variable | Description |
+|---|---|
+| `SPRING_PROFILES_ACTIVE` | `prod` |
+| `DATABASE_URL` | PostgreSQL JDBC URL |
+| `DATABASE_USERNAME` | DB username |
+| `DATABASE_PASSWORD` | DB password |
+| `JWT_SECRET` | Secret key for JWT signing |
+
+### Frontend (Vercel)
+| Variable | Description |
+|---|---|
+| `VITE_API_URL` | Backend API base URL (e.g. `https://your-app.onrender.com/api`) |
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Access |
+|---|---|---|
+| POST | `/api/auth/register` | Public |
+| POST | `/api/auth/login` | Public |
+| GET/POST | `/api/patients` | Admin, Receptionist |
+| GET/PUT/DELETE | `/api/patients/{id}` | Admin, Receptionist |
+| GET/POST | `/api/doctors` | Admin |
+| GET/PUT/DELETE | `/api/doctors/{id}` | Admin |
+| GET/POST | `/api/appointments` | Admin, Receptionist, Doctor |
+| GET/PUT/DELETE | `/api/appointments/{id}` | Admin, Receptionist |
+| GET/POST | `/api/invoices` | Admin, Receptionist |
+| GET/PUT/DELETE | `/api/invoices/{id}` | Admin, Receptionist |
+
+---
+
+## Testing
+
+```bash
 cd backend
 ./mvnw test
 ```
-### Frontend Testing Suite
-Form validation mechanics, responsive navigation flows, and components tested via Vitest and React Testing Library.
 
-```
-cd frontend
-npm run test
-```
+31 unit tests covering all service layers (Patient, Doctor, Appointment, Invoice, InvoiceItem, Auth).
 
-## 🛡️ Architecture & Security Disclaimer
-This application is designed specifically as an architectural learning model and portfolio showcase piece demonstrating corporate ERP software design principles.
+---
 
-* **HIPAA Compliance**: This software is NOT compliant with the Health Insurance Portability and Accountability Act (HIPAA) or similar international frameworks governing personal health information (PHI).
+## CI/CD
 
-* **Data Privacy**: Do not enter real patient details, authentic medical records, or genuine personal identifiable information (PII) into any live or local instance of this platform. All database seeding and interactions must use mock data.
+GitHub Actions runs on every push to `main`:
+- **Backend CI** — runs all 31 tests against a real Postgres container
+- **Frontend CI** — lint check + production build
 
-## 📄 License
-Distributed under the MIT License. See `LICENSE` for more information.
+---
+
+## Deployment
+
+- **Backend:** Render (Docker web service)
+- **Frontend:** Vercel
+- **Database:** Neon (serverless Postgres)
+
+---
+
+## Developer
+
+Built by **AbySynk - Naol Kedir** ([github.com/naol-onGit](https://github.com/naol-onGit)) as a portfolio project demonstrating intensive use of free tier AI's like Claude and ChatGPT for production-ready full-stack development with Java Spring Boot and React.
