@@ -27,7 +27,8 @@ export default function Doctors() {
     }
   }, []);
 
-  useEffect(() => { fetchDoctors(); }, [fetchDoctors]);
+// eslint-disable-next-line react-hooks/set-state-in-effect
+useEffect(() => { fetchDoctors(); }, [fetchDoctors]);
 
   const filtered = doctors.filter(d =>
     d.fullName?.toLowerCase().includes(search.toLowerCase()) ||

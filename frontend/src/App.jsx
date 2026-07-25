@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './routes/ProtectedRoute';
 import Layout from './components/layout/Layout';
 import Login from './pages/auth/Login';
@@ -8,6 +7,7 @@ import Patients from './pages/patients/Patients';
 import Doctors from './pages/doctors/Doctors';
 import Appointments from './pages/appointments/Appointments';
 import Billing from './pages/billing/Billing';
+import { AuthProvider } from './context/AuthProvider';
 
 export default function App() {
   return (

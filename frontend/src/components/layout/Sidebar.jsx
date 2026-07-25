@@ -7,7 +7,7 @@ import {
   Receipt,
   Cross,
 } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 import { navItems } from './sidebarConfig';
 
 const iconMap = {
@@ -36,7 +36,6 @@ export default function Sidebar({ expanded, setExpanded }) {
         shrink-0 overflow-hidden
       `}
     >
-      {/* Logo */}
       <div className="flex items-center gap-3 px-4 py-5 border-b border-blue-800">
         <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center shrink-0">
           <Cross size={16} className="text-white" />
@@ -49,7 +48,6 @@ export default function Sidebar({ expanded, setExpanded }) {
         )}
       </div>
 
-      {/* Nav items */}
       <nav className="flex-1 py-4 space-y-1 px-2">
         {visibleItems.map(({ to, label }) => {
           const Icon = iconMap[to];
@@ -77,7 +75,6 @@ export default function Sidebar({ expanded, setExpanded }) {
         })}
       </nav>
 
-      {/* User info at bottom */}
       <div className="px-2 py-4 border-t border-blue-800">
         <div className="flex items-center gap-3 px-2 py-2">
           <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center shrink-0 text-sm font-bold">

@@ -35,7 +35,8 @@ export default function Appointments() {
     }
   }, []);
 
-  useEffect(() => { fetchAppointments(); }, [fetchAppointments]);
+// eslint-disable-next-line react-hooks/set-state-in-effect
+useEffect(() => { fetchAppointments(); }, [fetchAppointments]);
 
   const filtered = appointments.filter(a =>
     a.status?.toLowerCase().includes(search.toLowerCase()) ||

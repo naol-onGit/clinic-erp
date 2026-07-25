@@ -32,7 +32,8 @@ export default function Billing() {
     }
   }, []);
 
-  useEffect(() => { fetchInvoices(); }, [fetchInvoices]);
+// eslint-disable-next-line react-hooks/set-state-in-effect
+useEffect(() => { fetchInvoices(); }, [fetchInvoices]);
 
   const filtered = invoices.filter(inv =>
     inv.status?.toLowerCase().includes(search.toLowerCase()) ||
